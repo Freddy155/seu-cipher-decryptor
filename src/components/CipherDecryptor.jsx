@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import PropTypes from "prop-types";
+import { FaArchway, FaFolder, FaCheck, FaClock } from "react-icons/fa"; // React Icons from Font Awesome
 
+/**
+ * CipherDecryptor - A React component with an Arch Linux Zsh terminal theme
+ * that demonstrates Caesar cipher decryption with the original UI flow, using react-icons.
+ */
 const CipherDecryptor = () => {
+  // State Definitions
   const [decrypting, setDecrypting] = useState(false);
   const [decryptionComplete, setDecryptionComplete] = useState(false);
   const [decryptedText, setDecryptedText] = useState("");
@@ -9,17 +16,30 @@ const CipherDecryptor = () => {
   const [showExplanation, setShowExplanation] = useState(true);
   const [typingIndex, setTypingIndex] = useState(0);
   const [cursorVisible, setCursorVisible] = useState(true);
+  const [currentTime, setCurrentTime] = useState(
+    new Date().toLocaleTimeString([], { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })
+  ); // Dynamic clock
 
+  // Constants
   const encryptedMessage =
     "Zhofrph wr VHX Xqlyhuvlwb! Zh duh gholjkwhg wr kdyh brx zlwk xv wrgdb dv zh vkrzfdvh rxu dgydqfhphqwv lq frpsxwlqj vhfxulwb. Brxu ylvlw lv dq krqru, dqg zh orrn iruzdug wr lqvljkwixo glvfxvvlrqv dqg ixwxuh fROoderudwlrqv";
   const decryptedMessage =
     "Welcome to SEU University! We are delighted to have you with us today as we showcase our advancements in computing security. Your visit is an honor, and we look forward to insightful discussions and future cOLlaborations";
-
   const terminalCommands = [
     'sudo ./decrypt_caesar.sh --input="encrypted_message.txt" --shift=3',
     "loading cryptography modules...",
     "initializing decryption algorithm...",
   ];
+  const promptPath = "~/SEU-Cipher-Decryptor/";
+
+  // Effect Hooks
+  useEffect(() => {
+    // Update clock every second
+    const timer = setInterval(() => {
+      setCurrentTime(new Date().toLocaleTimeString([], { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" }));
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     if (decrypting && typingIndex < terminalCommands.length) {
@@ -113,23 +133,19 @@ const CipherDecryptor = () => {
         initial={{ opacity: 0, scale: 0.95, rotate: -2 }}
         animate={{ opacity: 1, scale: 1, rotate: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-4xl bg-gradient-to-br from-gray-900 to-gray-800 rounded-xl shadow-2xl p-2 sm:p-4 overflow-hidden relative z-10"
-        style={{
-          border: "1px solid transparent",
-          backgroundClip: "padding-box",
-        }}
+        className="w-full max-w-4xl bg-black rounded-xl shadow-2xl p-2 sm:p-4 overflow-hidden relative z-10 border border-cyan-400"
       >
         {/* Animated Border */}
         <motion.div
           className="absolute inset-0 rounded-xl pointer-events-none"
-          style={{ 
+          style={{
             border: "2px solid transparent",
-            borderImage: "linear-gradient(45deg, #22c55e, #16a34a, #22c55e) 1",
+            borderImage: "linear-gradient(45deg, #1793D1, #22c55e, #1793D1) 1", // Arch cyan + green
           }}
           animate={{
             borderImage: [
-              "linear-gradient(45deg, #22c55e, #16a34a, #22c55e) 1",
-              "linear-gradient(45deg, #16a34a, #22c55e, #16a34a) 1",
+              "linear-gradient(45deg, #1793D1, #22c55e, #1793D1) 1",
+              "linear-gradient(45deg, #22c55e, #1793D1, #22c55e) 1",
             ],
           }}
           transition={{
@@ -139,24 +155,22 @@ const CipherDecryptor = () => {
           }}
         />
 
-        <div className="bg-gradient-to-r from-gray-800 to-gray-700 p-2 rounded-t-lg flex items-center space-x-2 border-b border-green-900 relative">
-          <motion.div 
-            className="h-3 w-3 rounded-full bg-red-500"
-            whileHover={{ scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-          <motion.div 
-            className="h-3 w-3 rounded-full bg-yellow-500"
-            whileHover={{ scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-          <motion.div 
-            className="h-3 w-3 rounded-full bg-green-500"
-            whileHover={{ scale: 1.2 }}
-            transition={{ duration: 0.2 }}
-          />
-          <div className="ml-2 text-gray-400 text-sm sm:text-base flex-1 text-center truncate">
-            seu-university@terminal:~/security-demo
+        {/* Arch Zsh Prompt Bar with React Icons */}
+        <div className="bg-black p-2 rounded-t-lg flex justify-between items-center border-b border-cyan-400 text-sm font-mono">
+          <div className="flex items-center space-x-2 text-green-500">
+            <FaArchway className="text-cyan-400" /> {/* Arch logo */}
+            <span className="text-green-500">›</span> {/* Separator */}
+            <FaFolder className="text-white" /> {/* Folder icon */}
+            <span className="text-white">{promptPath}</span> {/* Directory */}
+            <span className="text-green-500">›</span> {/* Separator */}
+            <FaClock className="text-green-400" /> {/* Clock icon */}
+            <span className="text-green-400">{currentTime}</span> {/* Dynamic clock */}
+          </div>
+          <div className="flex items-center space-x-2 text-green-500">
+            <span className="text-green-500">‹</span> {/* Reverse separator */}
+            <FaCheck className="text-green-400" /> {/* Success indicator */}
+            <span className="text-green-500">‹</span> {/* Separator */}
+            <FaArchway className="text-cyan-400" /> {/* Arch logo */}
           </div>
         </div>
 
@@ -191,14 +205,14 @@ const CipherDecryptor = () => {
                 {/* Animated Border */}
                 <motion.div
                   className="absolute inset-0 rounded-lg pointer-events-none"
-                  style={{ 
+                  style={{
                     border: "1px solid transparent",
-                    borderImage: "linear-gradient(to right, #22c55e, transparent) 1",
+                    borderImage: "linear-gradient(to right, #1793D1, transparent) 1", // Arch cyan
                   }}
                   animate={{
                     borderImage: [
-                      "linear-gradient(to right, #22c55e, transparent) 1",
-                      "linear-gradient(to right, transparent, #22c55e) 1",
+                      "linear-gradient(to right, #1793D1, transparent) 1",
+                      "linear-gradient(to right, transparent, #1793D1) 1",
                     ],
                   }}
                   transition={{
@@ -215,14 +229,14 @@ const CipherDecryptor = () => {
                   dating back to Julius Caesar who used it to communicate with his generals.
                 </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  <motion.div 
+                  <motion.div
                     className="bg-gradient-to-br from-black to-gray-900 bg-opacity-80 p-3 rounded border border-green-700 relative"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.3 }}
                   >
                     <motion.div
                       className="absolute inset-0 rounded pointer-events-none"
-                      style={{ border: "1px solid #22c55e" }}
+                      style={{ border: "1px solid #1793D1" }} // Arch cyan
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
@@ -236,14 +250,14 @@ const CipherDecryptor = () => {
                       <div>Z → C (shift 3)</div>
                     </div>
                   </motion.div>
-                  <motion.div 
+                  <motion.div
                     className="bg-gradient-to-br from-black to-gray-900 bg-opacity-80 p-3 rounded border border-green-700 relative"
                     whileHover={{ scale: 1.02 }}
                     transition={{ duration: 0.3 }}
                   >
                     <motion.div
                       className="absolute inset-0 rounded pointer-events-none"
-                      style={{ border: "1px solid #22c55e" }}
+                      style={{ border: "1px solid #1793D1" }} // Arch cyan
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
@@ -270,14 +284,14 @@ const CipherDecryptor = () => {
                   This simple algorithm represents the foundation of modern cryptography.
                 </p>
                 <motion.button
-                  whileHover={{ 
+                  whileHover={{
                     scale: 1.05,
                     boxShadow: "0 0 20px rgba(34,197,94,0.7)",
-                    background: "linear-gradient(45deg, #16a34a, #22c55e)"
+                    background: "linear-gradient(45deg, #16a34a, #22c55e)",
                   }}
                   whileTap={{ scale: 0.95 }}
                   animate={{
-                    borderColor: ["#22c55e", "#16a34a", "#22c55e"],
+                    borderColor: ["#1793D1", "#22c55e", "#1793D1"], // Arch cyan + green
                   }}
                   transition={{
                     duration: 1.5,
@@ -312,7 +326,7 @@ const CipherDecryptor = () => {
               <div className="text-green-400 mb-2 text-sm sm:text-base">
                 [SEU-SECURITY]$ cat encrypted_message.txt
               </div>
-              <motion.div 
+              <motion.div
                 className="bg-gradient-to-br from-black to-gray-900 p-3 rounded border border-green-800 mb-4 text-xs sm:text-sm break-words relative"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -320,7 +334,7 @@ const CipherDecryptor = () => {
               >
                 <motion.div
                   className="absolute inset-0 rounded pointer-events-none"
-                  style={{ border: "1px solid #22c55e" }}
+                  style={{ border: "1px solid #1793D1" }} // Arch cyan
                   animate={{ opacity: [0.3, 0.8, 0.3] }}
                   transition={{ duration: 2.5, repeat: Infinity }}
                 />
@@ -335,14 +349,14 @@ const CipherDecryptor = () => {
                   className="flex flex-col items-center"
                 >
                   <motion.button
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.05,
                       boxShadow: "0 0 25px rgba(34,197,94,0.8)",
-                      background: "linear-gradient(45deg, #16a34a, #22c55e)"
+                      background: "linear-gradient(45deg, #16a34a, #22c55e)",
                     }}
                     whileTap={{ scale: 0.95 }}
                     animate={{
-                      borderColor: ["#22c55e", "#16a34a", "#22c55e"],
+                      borderColor: ["#1793D1", "#22c55e", "#1793D1"], // Arch cyan + green
                     }}
                     transition={{
                       duration: 1.5,
@@ -425,7 +439,7 @@ const CipherDecryptor = () => {
                         >
                           <motion.div
                             className="absolute inset-0"
-                            style={{ border: "1px solid #22c55e" }}
+                            style={{ border: "1px solid #1793D1" }} // Arch cyan
                             animate={{ opacity: [0.5, 1, 0.5] }}
                             transition={{ duration: 2, repeat: Infinity }}
                           />
@@ -453,7 +467,7 @@ const CipherDecryptor = () => {
                   <div className="text-green-400 mb-2 text-sm sm:text-base">
                     [SEU-SECURITY]$ cat decrypted_output.txt
                   </div>
-                  <motion.div 
+                  <motion.div
                     className="bg-gradient-to-br from-black to-gray-900 p-3 rounded border border-green-800 min-h-16 text-sm sm:text-base break-words relative"
                     initial={{ scale: 0.98 }}
                     animate={{ scale: 1 }}
@@ -461,7 +475,7 @@ const CipherDecryptor = () => {
                   >
                     <motion.div
                       className="absolute inset-0 rounded pointer-events-none"
-                      style={{ border: "1px solid #22c55e" }}
+                      style={{ border: "1px solid #1793D1" }} // Arch cyan
                       animate={{ opacity: [0.3, 0.8, 0.3] }}
                       transition={{ duration: 2.5, repeat: Infinity }}
                     />
@@ -488,7 +502,7 @@ const CipherDecryptor = () => {
                 >
                   <motion.div
                     className="absolute inset-0 rounded-lg pointer-events-none"
-                    style={{ border: "1px solid #22c55e" }}
+                    style={{ border: "1px solid #1793D1" }} // Arch cyan
                     animate={{ opacity: [0.5, 1, 0.5] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   />
@@ -503,14 +517,14 @@ const CipherDecryptor = () => {
                     Proceed to visitor check-in terminal.
                   </div>
                   <motion.button
-                    whileHover={{ 
+                    whileHover={{
                       scale: 1.05,
                       boxShadow: "0 0 20px rgba(34,197,94,0.7)",
-                      background: "linear-gradient(45deg, #16a34a, #22c55e)"
+                      background: "linear-gradient(45deg, #16a34a, #22c55e)",
                     }}
                     whileTap={{ scale: 0.95 }}
                     animate={{
-                      borderColor: ["#22c55e", "#16a34a", "#22c55e"],
+                      borderColor: ["#1793D1", "#22c55e", "#1793D1"], // Arch cyan + green
                     }}
                     transition={{
                       duration: 1.5,
@@ -541,11 +555,11 @@ const CipherDecryptor = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, type: "spring" }}
-            className="text-gray-500 text-xs border-t border-green-900 pt-3 mt-6 relative"
+            className="text-gray-500 text-xs border-t border-cyan-400 pt-3 mt-6 relative" // Arch cyan border
           >
             <motion.div
               className="absolute inset-0 pointer-events-none"
-              style={{ borderTop: "1px solid #22c55e" }}
+              style={{ borderTop: "1px solid #1793D1" }} // Arch cyan
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
@@ -558,4 +572,8 @@ const CipherDecryptor = () => {
   );
 };
 
+// PropTypes for future extensibility
+CipherDecryptor.propTypes = {};
+
+// Export
 export default CipherDecryptor;
