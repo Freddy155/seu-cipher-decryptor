@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import PropTypes from "prop-types";
-import { FaArchway, FaFolder, FaCheck, FaClock } from "react-icons/fa"; // React Icons from Font Awesome
+import { BsTerminalFill, BsReception4, BsLightningFill } from "react-icons/bs";
+import { AiOutlineLock, AiOutlineBug } from "react-icons/ai";
+import { GiCircuitry } from "react-icons/gi";
+import { MdOutlineSecurity } from "react-icons/md";
 
-/**
- * CipherDecryptor - A React component with an Arch Linux Zsh terminal theme
- * that demonstrates Caesar cipher decryption with the original UI flow, using react-icons.
- */
 const CipherDecryptor = () => {
-  // State Definitions
   const [decrypting, setDecrypting] = useState(false);
   const [decryptionComplete, setDecryptionComplete] = useState(false);
   const [decryptedText, setDecryptedText] = useState("");
@@ -18,9 +16,8 @@ const CipherDecryptor = () => {
   const [cursorVisible, setCursorVisible] = useState(true);
   const [currentTime, setCurrentTime] = useState(
     new Date().toLocaleTimeString([], { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" })
-  ); // Dynamic clock
+  );
 
-  // Constants
   const encryptedMessage =
     "Zhofrph wr VHX Xqlyhuvlwb! Zh duh gholjkwhg wr kdyh brx zlwk xv wrgdb dv zh vkrzfdvh rxu dgydqfhphqwv lq frpsxwlqj vhfxulwb. Brxu ylvlw lv dq krqru, dqg zh orrn iruzdug wr lqvljkwixo glvfxvvlrqv dqg ixwxuh fROoderudwlrqv";
   const decryptedMessage =
@@ -30,11 +27,9 @@ const CipherDecryptor = () => {
     "loading cryptography modules...",
     "initializing decryption algorithm...",
   ];
-  const promptPath = "~/SEU-Cipher-Decryptor/";
+  const promptPath = "root@seu";
 
-  // Effect Hooks
   useEffect(() => {
-    // Update clock every second
     const timer = setInterval(() => {
       setCurrentTime(new Date().toLocaleTimeString([], { hour12: true, hour: "2-digit", minute: "2-digit", second: "2-digit" }));
     }, 1000);
@@ -62,19 +57,18 @@ const CipherDecryptor = () => {
   };
 
   useEffect(() => {
-    if (decrypting && progress < 100 && typingIndex >= terminalCommands.length) {
+    if (decrypting && typingIndex >= terminalCommands.length && progress < decryptedMessage.length) {
       const timer = setTimeout(() => {
         setProgress((prev) => {
           const newProgress = prev + 1;
-          const charsToShow = Math.floor((newProgress / 100) * decryptedMessage.length);
-          setDecryptedText(decryptedMessage.substring(0, charsToShow));
-          if (newProgress >= 100) {
+          setDecryptedText(decryptedMessage.substring(0, newProgress));
+          if (newProgress >= decryptedMessage.length) {
             setDecryptionComplete(true);
             setDecrypting(false);
           }
           return newProgress;
         });
-      }, 40);
+      }, 40); // 40ms
       return () => clearTimeout(timer);
     }
   }, [decrypting, progress, typingIndex, decryptedMessage]);
@@ -84,193 +78,197 @@ const CipherDecryptor = () => {
     setDecryptedText("");
     setShowExplanation(true);
     setTypingIndex(0);
+    setProgress(0);
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.8, ease: "easeOut", staggerChildren: 0.1 } },
+  };
+
+  const headerVariants = {
+    hidden: { opacity: 0, y: -20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
+  const sectionVariants = {
+    hidden: { opacity: 0, x: -50, skewX: 2 },
+    visible: { opacity: 1, x: 0, skewX: 0, transition: { duration: 0.6, ease: "easeOut" } },
+    exit: { opacity: 0, x: 50, skewX: -2, transition: { duration: 0.4, ease: "easeIn" } },
+  };
+
+  const buttonVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.5, ease: "easeOut" } },
+  };
+
+  const footerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, delay: 0.5, ease: "easeOut" } },
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center p-4 sm:p-6 text-green-500 font-mono relative overflow-hidden">
-      {/* Matrix Background */}
+    <div className="min-h-screen bg-black flex items-center justify-center p-1 sm:p-6 text-green-400 font-mono relative overflow-hidden">
       <motion.div
         className="absolute inset-0 z-0"
         style={{
-          background: "linear-gradient(45deg, #0a0a0a, #1a1a1a)",
+          background: "radial-gradient(circle at center, #0a1a2a, #000000)",
+          backgroundImage: "url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJElEQVQYV2NkwA/+J/8/AyYGBgYGZgYGBgZmBgYGBgYGZgYGBgAALQ4C7WHoYgAAAABJRU5ErkJggg==')",
+          backgroundRepeat: "repeat",
+          opacity: 0.9,
         }}
+        animate={{ opacity: [0.7, 0.9, 0.7] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       >
         <motion.div
-          className="absolute inset-0 opacity-30"
+          className="absolute inset-0 opacity-20 sm:opacity-25"
           style={{
             backgroundImage: `
-              repeating-linear-gradient(90deg, rgba(34,197,94,0.1) 0px, rgba(34,197,94,0.1) 2px, transparent 2px, transparent 4px),
-              repeating-linear-gradient(0deg, rgba(34,197,94,0.1) 0px, rgba(34,197,94,0.1) 2px, transparent 2px, transparent 4px)
+              repeating-linear-gradient(45deg, rgba(0,255,204,0.1) 0px, rgba(0,255,204,0.1) 2px, transparent 2px, transparent 4px)
             `,
           }}
-          animate={{
-            y: [0, -20],
-            opacity: [0.2, 0.4, 0.2],
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "linear",
-          }}
+          animate={{ y: [0, -20], opacity: [0.15, 0.3] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
         />
         <motion.div
-          className="absolute inset-0"
-          animate={{
-            background: [
-              "radial-gradient(circle at 30% 30%, rgba(34,197,94,0.15) 0%, transparent 70%)",
-              "radial-gradient(circle at 70% 70%, rgba(34,197,94,0.15) 0%, transparent 70%)",
-            ],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
+          className="absolute inset-0 opacity-10 sm:opacity-15"
+          style={{ background: "linear-gradient(90deg, rgba(0,255,204,0.05), transparent)" }}
+          animate={{ x: ["-100%", "100%"] }}
+          transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
         />
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, rotate: -2 }}
-        animate={{ opacity: 1, scale: 1, rotate: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="w-full max-w-4xl bg-black rounded-xl shadow-2xl p-2 sm:p-4 overflow-hidden relative z-10 border border-cyan-400"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="w-full max-w-full sm:max-w-4xl bg-black rounded-lg shadow-2xl p-1 sm:p-4 overflow-hidden relative z-10 border-4 border-[#00ffcc]"
+        style={{ boxShadow: "0 0 30px rgba(0,255,204,0.4), inset 0 0 10px rgba(0,255,204,0.1)" }}
       >
-        {/* Animated Border */}
         <motion.div
-          className="absolute inset-0 rounded-xl pointer-events-none"
-          style={{
-            border: "2px solid transparent",
-            borderImage: "linear-gradient(45deg, #1793D1, #22c55e, #1793D1) 1", // Arch cyan + green
-          }}
+          className="absolute inset-0 rounded-lg pointer-events-none"
+          style={{ border: "3px solid transparent" }}
           animate={{
             borderImage: [
-              "linear-gradient(45deg, #1793D1, #22c55e, #1793D1) 1",
-              "linear-gradient(45deg, #22c55e, #1793D1, #22c55e) 1",
+              "linear-gradient(45deg, #00ffcc, #39ff14, #00ffcc) 10",
+              "linear-gradient(45deg, #39ff14, #00ffcc, #39ff14) 10",
             ],
+            boxShadow: ["0 0 15px rgba(0,255,204,0.4)", "0 0 30px rgba(0,255,204,0.7)"],
           }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            repeatType: "reverse",
-          }}
+          transition={{ duration: 2, repeat: Infinity, repeatType: "reverse" }}
         />
 
-        {/* Arch Zsh Prompt Bar with React Icons */}
-        <div className="bg-black p-2 rounded-t-lg flex justify-between items-center border-b border-cyan-400 text-sm font-mono">
-          <div className="flex items-center space-x-2 text-green-500">
-            <FaArchway className="text-cyan-400" /> {/* Arch logo */}
-            <span className="text-green-500">›</span> {/* Separator */}
-            <FaFolder className="text-white" /> {/* Folder icon */}
-            <span className="text-white">{promptPath}</span> {/* Directory */}
-            <span className="text-green-500">›</span> {/* Separator */}
-            <FaClock className="text-green-400" /> {/* Clock icon */}
-            <span className="text-green-400">{currentTime}</span> {/* Dynamic clock */}
+        <motion.div
+          variants={headerVariants}
+          className="bg-black p-2 rounded-t-lg flex flex-col sm:flex-row justify-between items-center border-b-2 border-[#00ffcc] text-[10px] sm:text-sm font-mono space-y-2 sm:space-y-0"
+        >
+          <div className="flex flex-col sm:flex-row items-center space-x-0 sm:space-x-2 text-green-400 w-full sm:w-auto">
+            <motion.div variants={headerVariants} className="flex items-center space-x-1">
+              <BsTerminalFill className="text-[#39ff14] animate-pulse" />
+              <span className="text-[#00ffcc]">_</span>
+              <AiOutlineLock className="text-[#e0ffeb]" />
+              <span className="text-[#e0ffeb] truncate max-w-[40vw] sm:max-w-none">{promptPath}</span>
+            </motion.div>
+            <motion.div variants={headerVariants} className="flex items-center space-x-1 mt-1 sm:mt-0">
+              <span className="text-[#00ffcc] sm:ml-2">></span>
+              <motion.span
+                animate={{ opacity: [0.7, 1, 0.7], scale: [1, 1.05, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+                className="text-[#39ff14]"
+              >
+                {currentTime}
+              </motion.span>
+              <BsReception4 className="text-[#00ffcc] animate-pulse" />
+            </motion.div>
           </div>
-          <div className="flex items-center space-x-2 text-green-500">
-            <span className="text-green-500">‹</span> {/* Reverse separator */}
-            <FaCheck className="text-green-400" /> {/* Success indicator */}
-            <span className="text-green-500">‹</span> {/* Separator */}
-            <FaArchway className="text-cyan-400" /> {/* Arch logo */}
-          </div>
-        </div>
-
-        <div className="p-4 sm:p-6 overflow-y-auto max-h-[80vh]">
-          <motion.div
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 120 }}
-            className="mb-2 text-green-400 text-sm sm:text-base"
-          >
-            [SEU-SECURITY]$ ./launcher.sh --module=caesar_cipher
+          <motion.div variants={headerVariants} className="flex items-center space-x-1 sm:space-x-2 text-green-400">
+            <span className="text-[#00ffcc]">[</span>
+            <GiCircuitry className="text-[#39ff14] animate-spin-slow" />
+            <span className="text-[#e0ffeb]">] SIGNAL: ACTIVE</span>
           </motion.div>
+        </motion.div>
 
-          <motion.h1
-            initial={{ y: 20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.3, type: "spring", stiffness: 100 }}
-            className="text-green-500 mb-6 text-lg sm:text-xl font-bold"
-          >
-            SEU University Terminal - Security Showcase v2.0.3
-          </motion.h1>
-
-          <AnimatePresence>
+        <div className="p-2 sm:p-6 overflow-y-auto max-h-[60vh] sm:max-h-[70vh] text-[10px] sm:text-base relative">
+          <AnimatePresence mode="wait">
             {showExplanation && (
               <motion.div
-                initial={{ opacity: 0, height: 0, y: 20 }}
-                animate={{ opacity: 1, height: "auto", y: 0 }}
-                exit={{ opacity: 0, height: 0, y: -20 }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-                className="mb-8 bg-gradient-to-br from-black to-gray-900 bg-opacity-70 p-4 rounded-lg relative"
+                key="explanation"
+                variants={sectionVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="mb-4 sm:mb-8 bg-black p-2 sm:p-4 rounded-lg border-2 border-[#00ffcc] relative"
+                style={{ boxShadow: "0 0 20px rgba(0,255,204,0.2)" }}
               >
-                {/* Animated Border */}
                 <motion.div
                   className="absolute inset-0 rounded-lg pointer-events-none"
-                  style={{
-                    border: "1px solid transparent",
-                    borderImage: "linear-gradient(to right, #1793D1, transparent) 1", // Arch cyan
-                  }}
-                  animate={{
-                    borderImage: [
-                      "linear-gradient(to right, #1793D1, transparent) 1",
-                      "linear-gradient(to right, transparent, #1793D1) 1",
-                    ],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                  }}
+                  style={{ border: "1px dashed #00ffcc" }}
+                  animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.02, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
                 />
-                <h2 className="text-green-300 text-lg font-bold mb-2">
-                  -- THE CAESAR CIPHER --
-                </h2>
-                <p className="mb-4 text-green-400 text-sm sm:text-base">
-                  The Caesar cipher is one of the earliest encryption techniques,
-                  dating back to Julius Caesar who used it to communicate with his generals.
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <motion.h2
+                  variants={sectionVariants}
+                  className="text-[#e0ffeb] text-sm sm:text-lg font-bold mb-2 text-center sm:text-left flex items-center justify-center sm:justify-start"
+                >
+                  <MdOutlineSecurity className="mr-2 text-[#39ff14]" />
+                  > CAESAR CIPHER CORE
+                </motion.h2>
+                <motion.p
+                  variants={sectionVariants}
+                  className="mb-2 sm:mb-4 text-[#e0ffeb] text-[10px] sm:text-base"
+                >
+                  Accessing ancient crypto-matrix... Caesar cipher online. Deployed by rogue agents, 50 BCE.
+                </motion.p>
+                <motion.div
+                  variants={sectionVariants}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-4 mb-2 sm:mb-4"
+                >
                   <motion.div
-                    className="bg-gradient-to-br from-black to-gray-900 bg-opacity-80 p-3 rounded border border-green-700 relative"
-                    whileHover={{ scale: 1.02 }}
+                    className="bg-black p-2 sm:p-3 rounded border border-[#00ffcc] relative"
+                    whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(0,255,204,0.4)" }}
                     transition={{ duration: 0.3 }}
                   >
                     <motion.div
                       className="absolute inset-0 rounded pointer-events-none"
-                      style={{ border: "1px solid #1793D1" }} // Arch cyan
+                      style={{ border: "1px solid #00ffcc" }}
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
-                    <div className="text-green-500 mb-2 text-sm">$ man caesar_cipher</div>
-                    <p className="text-gray-300 mb-2 text-xs sm:text-sm">
-                      Each letter is shifted a fixed number of positions down the alphabet:
+                    <div className="text-[#e0ffeb] mb-2 text-[10px] sm:text-sm flex items-center">
+                      <GiCircuitry className="mr-2 text-[#39ff14]" />
+                      $> SCAN: caesar_cipher
+                    </div>
+                    <p className="text-[#e0ffeb] mb-2 text-[10px]">
+                      Shifting data grid by quantum offset:
                     </p>
-                    <div className="text-gray-400 text-xs">
-                      <div>A → D (shift 3)</div>
-                      <div>B → E (shift 3)</div>
-                      <div>Z → C (shift 3)</div>
+                    <div className="text-[#e0ffeb] text-[10px]">
+                      <div>A → D [OFFSET: 3]</div>
+                      <div>B → E [OFFSET: 3]</div>
+                      <div>Z → C [OFFSET: 3]</div>
                     </div>
                   </motion.div>
                   <motion.div
-                    className="bg-gradient-to-br from-black to-gray-900 bg-opacity-80 p-3 rounded border border-green-700 relative"
-                    whileHover={{ scale: 1.02 }}
+                    className="bg-black p-2 sm:p-3 rounded border border-[#00ffcc] relative"
+                    whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(0,255,204,0.4)" }}
                     transition={{ duration: 0.3 }}
                   >
                     <motion.div
                       className="absolute inset-0 rounded pointer-events-none"
-                      style={{ border: "1px solid #1793D1" }} // Arch cyan
+                      style={{ border: "1px solid #00ffcc" }}
                       animate={{ opacity: [0.5, 1, 0.5] }}
                       transition={{ duration: 2, repeat: Infinity }}
                     />
-                    <div className="text-green-500 mb-2 text-sm">
-                      $ echo "HELLO" | ./caesar.sh -s 3
+                    <div className="text-[#e0ffeb] mb-2 text-[10px] sm:text-sm flex items-center">
+                      <BsLightningFill className="mr-2 text-[#39ff14]" />
+                      $> EXEC: "HELLO" | caesar -s 3
                     </div>
-                    <div className="text-gray-300 mb-1 text-xs sm:text-sm">
-                      Input: <span className="text-blue-300">HELLO</span>
+                    <div className="text-[#e0ffeb] mb-1 text-[10px]">
+                      INPUT: <span className="text-[#39ff14]">HELLO</span>
                     </div>
-                    <div className="text-gray-300 mb-1 text-xs sm:text-sm">
-                      Output: <span className="text-green-300">KHOOR</span>
+                    <div className="text-[#e0ffeb] mb-1 text-[10px]">
+                      OUTPUT: <span className="text-[#39ff14]">KHOOR</span>
                     </div>
-                    <div className="mt-2 text-gray-400 text-xs border-t border-green-900 pt-2">
+                    <div className="mt-2 text-[#e0ffeb] text-[10px] border-t border-[#00ffcc] pt-2">
                       shift('H') → 'K'<br />
                       shift('E') → 'H'<br />
                       shift('L') → 'O'<br />
@@ -278,293 +276,240 @@ const CipherDecryptor = () => {
                       shift('O') → 'R'
                     </div>
                   </motion.div>
-                </div>
-                <p className="mb-4 text-green-400 text-sm sm:text-base">
-                  The target message is encrypted using a Caesar cipher with shift=3.
-                  This simple algorithm represents the foundation of modern cryptography.
-                </p>
+                </motion.div>
+                <motion.p
+                  variants={sectionVariants}
+                  className="mb-2 sm:mb-4 text-[#e0ffeb] text-[10px] sm:text-base"
+                >
+                  Target encrypted with offset=3. Booting decryption engine...
+                </motion.p>
                 <motion.button
+                  variants={buttonVariants}
                   whileHover={{
                     scale: 1.05,
-                    boxShadow: "0 0 20px rgba(34,197,94,0.7)",
-                    background: "linear-gradient(45deg, #16a34a, #22c55e)",
+                    boxShadow: "0 0 30px rgba(0,255,204,0.7)",
+                    background: "linear-gradient(45deg, #1a3c34, #00ffcc)",
                   }}
                   whileTap={{ scale: 0.95 }}
                   animate={{
-                    borderColor: ["#1793D1", "#22c55e", "#1793D1"], // Arch cyan + green
+                    borderColor: ["#00ffcc", "#39ff14", "#00ffcc"],
+                    boxShadow: ["0 0 15px rgba(0,255,204,0.3)", "0 0 25px rgba(0,255,204,0.6)"],
                   }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                  }}
-                  onClick={() => setShowExplanation(false)}
-                  className="mt-2 w-full sm:w-auto bg-gradient-to-r from-green-800 to-green-700 text-green-100 font-bold py-2 px-4 rounded border-2 border-green-600 transition-colors duration-300 text-sm sm:text-base relative overflow-hidden"
+                  transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+                  onClick={startDecryption}
+                  className="w-full bg-[#1a3c34] text-[#e0ffeb] font-bold py-2 px-3 rounded border-2 border-[#00ffcc] text-[10px] sm:text-base relative overflow-hidden min-h-[48px]"
                 >
                   <motion.div
                     className="absolute inset-0"
-                    animate={{
-                      background: [
-                        "linear-gradient(45deg, rgba(34,197,94,0.2), transparent)",
-                        "linear-gradient(45deg, transparent, rgba(34,197,94,0.2))",
-                      ],
-                    }}
-                    transition={{ duration: 2, repeat: Infinity }}
+                    animate={{ x: ["-100%", "100%"] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                    style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,204,0.2), transparent)" }}
                   />
-                  $ ./start_demo.sh
+                  <BsLightningFill className="inline mr-2" />
+                  $> LAUNCH DECRYPTION
                 </motion.button>
+              </motion.div>
+            )}
+
+            {!showExplanation && (
+              <motion.div
+                key="decryption"
+                variants={sectionVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="space-y-3 sm:space-y-4"
+              >
+                <motion.div variants={sectionVariants}>
+                  <div className="text-[#e0ffeb] mb-1 flex items-center">
+                    <AiOutlineLock className="mr-2 text-[#39ff14]" />
+                    $> cat encrypted_message.txt
+                  </div>
+                  <div className="text-[#e0ffeb] bg-black p-2 rounded border-2 border-[#00ffcc] animate-pulse">
+                    {encryptedMessage}
+                  </div>
+                  <div className="text-[#00ffcc] mt-1">════</div>
+                </motion.div>
+
+                {decrypting && (
+                  <motion.div variants={sectionVariants}>
+                    <AnimatePresence>
+                      {typingIndex > 0 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="text-[#e0ffeb] mb-1 flex items-center"
+                        >
+                          <GiCircuitry className="mr-2 text-[#39ff14]" />
+                          $> {terminalCommands[0]}
+                        </motion.div>
+                      )}
+                      {typingIndex > 1 && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                          className="text-[#e0ffeb] mb-1 animate-pulse"
+                        >
+                          {terminalCommands[1]}
+                        </motion.div>
+                      )}
+                      {typingIndex > 2 && (
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.4 }}
+                        >
+                          <div className="text-[#e0ffeb] mb-1">{terminalCommands[2]}</div>
+                          <div className="text-[#e0ffeb] mb-1 flex items-center">
+                            <MdOutlineSecurity className="mr-2 text-[#39ff14]" />
+                            STATUS: <span className="text-[#39ff14]">[{Math.round((progress / decryptedMessage.length) * 100)}%]</span>
+                          </div>
+                          <motion.div
+                            className="w-full bg-black rounded-sm h-2 sm:h-3 border-2 border-[#00ffcc] overflow-hidden relative"
+                            initial={{ width: 0 }}
+                            animate={{ width: "100%" }}
+                            transition={{ duration: 0.5 }}
+                          >
+                            <motion.div
+                              className="bg-gradient-to-r from-[#39ff14] to-[#00ffcc] h-full"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${(progress / decryptedMessage.length) * 100}%` }}
+                              transition={{ duration: 0.3 }}
+                              style={{ boxShadow: "0 0 10px rgba(0,255,204,0.5)" }}
+                            />
+                            <motion.div
+                              className="absolute inset-0"
+                              animate={{ x: ["-100%", "100%"] }}
+                              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                              style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,204,0.2), transparent)" }}
+                            />
+                          </motion.div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <div className="text-[#00ffcc] mt-1">════</div>
+                  </motion.div>
+                )}
+
+                {(decrypting && typingIndex > 2) || decryptionComplete ? (
+                  <motion.div variants={sectionVariants}>
+                    <div className="text-[#e0ffeb] mb-1 flex items-center">
+                      <AiOutlineLock className="mr-2 text-[#39ff14]" />
+                      $> cat decrypted_output.txt
+                    </div>
+                    <div className="text-[#e0ffeb] bg-black p-2 rounded border-2 border-[#00ffcc] whitespace-pre-wrap">
+                      {decryptedText}
+                      {!decryptionComplete && cursorVisible && (
+                        <motion.span
+                          animate={{ opacity: [1, 0], scale: [1, 1.2] }}
+                          transition={{ duration: 0.5, repeat: Infinity }}
+                          className="text-[#39ff14] inline-block w-1 h-3 sm:h-4 bg-[#39ff14]"
+                          style={{ verticalAlign: "middle" }}
+                        />
+                      )}
+                    </div>
+                    <div className="text-[#00ffcc] mt-1">════</div>
+                  </motion.div>
+                ) : null}
+
+                {decryptionComplete && (
+                  <motion.div variants={sectionVariants}>
+                    <div className="text-[#e0ffeb] mb-1 flex items-center">
+                      <MdOutlineSecurity className="mr-2 text-[#39ff14]" />
+                      $> validate --success
+                    </div>
+                    <div className="text-[#e0ffeb] mb-1 animate-pulse">DECRYPTION COMPLETE. ACCESS GRANTED.</div>
+                    <div className="text-[#e0ffeb] mb-2">
+                      Proceed to secure node. System integrity at 100%.
+                    </div>
+                    <motion.button
+                      variants={buttonVariants}
+                      whileHover={{
+                        scale: 1.05,
+                        boxShadow: "0 0 30px rgba(0,255,204,0.7)",
+                        background: "linear-gradient(45deg, #1a3c34, #00ffcc)",
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      animate={{
+                        borderColor: ["#00ffcc", "#39ff14", "#00ffcc"],
+                        boxShadow: ["0 0 15px rgba(0,255,204,0.3)", "0 0 25px rgba(0,255,204,0.6)"],
+                      }}
+                      transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+                      onClick={resetDemo}
+                      className="w-full bg-[#1a3c34] text-[#e0ffeb] font-bold py-2 px-3 rounded border-2 border-[#00ffcc] text-[10px] sm:text-base relative overflow-hidden min-h-[48px]"
+                    >
+                      <motion.div
+                        className="absolute inset-0"
+                        animate={{ x: ["-100%", "100%"] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                        style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,204,0.2), transparent)" }}
+                      />
+                      <BsLightningFill className="inline mr-2" />
+                      $> REBOOT SYSTEM
+                    </motion.button>
+                  </motion.div>
+                )}
+
+                {!decryptionComplete && !decrypting && (
+                  <motion.div variants={sectionVariants}>
+                    <motion.button
+                      variants={buttonVariants}
+                      whileHover={{
+                        scale: 1.05,
+                        boxShadow: "0 0 30px rgba(0,255,204,0.7)",
+                        background: "linear-gradient(45deg, #1a3c34, #00ffcc)",
+                      }}
+                      whileTap={{ scale: 0.95 }}
+                      animate={{
+                        borderColor: ["#00ffcc", "#39ff14", "#00ffcc"],
+                        boxShadow: ["0 0 15px rgba(0,255,204,0.3)", "0 0 25px rgba(0,255,204,0.6)"],
+                      }}
+                      transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+                      onClick={startDecryption}
+                      className="w-full bg-[#1a3c34] text-[#e0ffeb] font-bold py-2 px-3 border-2 border-[#00ffcc] rounded text-[10px] sm:text-base relative overflow-hidden min-h-[48px]"
+                    >
+                      <motion.div
+                        className="absolute inset-0"
+                        animate={{ x: ["-100%", "100%"] }}
+                        transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+                        style={{ background: "linear-gradient(90deg, transparent, rgba(0,255,204,0.2), transparent)" }}
+                      />
+                      <BsLightningFill className="inline mr-2" />
+                      $> ACTIVATE DECRYPTION
+                    </motion.button>
+                    <motion.span
+                      animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.1, 1] }}
+                      transition={{ duration: 1.5, repeat: Infinity }}
+                      className="mt-2 text-[#e0ffeb] text-[10px] block text-center"
+                    >
+                      [SYSTEM READY]
+                    </motion.span>
+                  </motion.div>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
 
-          {!showExplanation && (
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, type: "spring", stiffness: 80 }}
-            >
-              <div className="text-green-400 mb-2 text-sm sm:text-base">
-                [SEU-SECURITY]$ cat encrypted_message.txt
-              </div>
-              <motion.div
-                className="bg-gradient-to-br from-black to-gray-900 p-3 rounded border border-green-800 mb-4 text-xs sm:text-sm break-words relative"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <motion.div
-                  className="absolute inset-0 rounded pointer-events-none"
-                  style={{ border: "1px solid #1793D1" }} // Arch cyan
-                  animate={{ opacity: [0.3, 0.8, 0.3] }}
-                  transition={{ duration: 2.5, repeat: Infinity }}
-                />
-                {encryptedMessage}
-              </motion.div>
-
-              {!decryptionComplete && !decrypting && (
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                  className="flex flex-col items-center"
-                >
-                  <motion.button
-                    whileHover={{
-                      scale: 1.05,
-                      boxShadow: "0 0 25px rgba(34,197,94,0.8)",
-                      background: "linear-gradient(45deg, #16a34a, #22c55e)",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={{
-                      borderColor: ["#1793D1", "#22c55e", "#1793D1"], // Arch cyan + green
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                    }}
-                    onClick={startDecryption}
-                    className="w-full sm:w-auto bg-gradient-to-r from-black to-gray-900 text-green-500 font-bold py-2 px-4 border-2 border-green-600 rounded shadow-lg transition-all duration-300 text-sm sm:text-base relative overflow-hidden"
-                  >
-                    <motion.div
-                      className="absolute inset-0"
-                      animate={{
-                        background: [
-                          "linear-gradient(45deg, rgba(34,197,94,0.2), transparent)",
-                          "linear-gradient(45deg, transparent, rgba(34,197,94,0.2))",
-                        ],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                    Start Decrypting...
-                  </motion.button>
-                  <motion.span
-                    animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.1, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                    className="mt-2 text-green-400 text-xs"
-                  >
-                    Click the button above
-                  </motion.span>
-                </motion.div>
-              )}
-
-              {decrypting && (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, type: "spring" }}
-                  className="mb-6"
-                >
-                  <AnimatePresence>
-                    {typingIndex > 0 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4 }}
-                        className="text-green-400 mb-1 text-sm"
-                      >
-                        [SEU-SECURITY]$ {terminalCommands[0]}
-                      </motion.div>
-                    )}
-                    {typingIndex > 1 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4 }}
-                        className="text-yellow-500 mb-1 text-sm"
-                      >
-                        {terminalCommands[1]}
-                      </motion.div>
-                    )}
-                    {typingIndex > 2 && (
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4 }}
-                      >
-                        <div className="text-yellow-500 mb-3 text-sm">
-                          {terminalCommands[2]}
-                        </div>
-                        <div className="mb-2 text-gray-400 text-sm">
-                          Decrypting cipher: <span className="text-green-400">[{progress}%]</span>
-                        </div>
-                        <motion.div
-                          className="w-full bg-gray-900 rounded-sm h-2 mb-4 border border-green-900 overflow-hidden relative"
-                          initial={{ width: 0 }}
-                          animate={{ width: "100%" }}
-                          transition={{ duration: 0.5 }}
-                        >
-                          <motion.div
-                            className="absolute inset-0"
-                            style={{ border: "1px solid #1793D1" }} // Arch cyan
-                            animate={{ opacity: [0.5, 1, 0.5] }}
-                            transition={{ duration: 2, repeat: Infinity }}
-                          />
-                          <motion.div
-                            className="bg-gradient-to-r from-green-600 to-green-400 h-full"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progress}%` }}
-                            transition={{ duration: 0.3 }}
-                            whileHover={{ boxShadow: "inset 0 0 10px rgba(34,197,94,0.5)" }}
-                          />
-                        </motion.div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-              )}
-
-              {(decrypting && typingIndex > 2) || decryptionComplete ? (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, type: "spring" }}
-                  className="mt-6"
-                >
-                  <div className="text-green-400 mb-2 text-sm sm:text-base">
-                    [SEU-SECURITY]$ cat decrypted_output.txt
-                  </div>
-                  <motion.div
-                    className="bg-gradient-to-br from-black to-gray-900 p-3 rounded border border-green-800 min-h-16 text-sm sm:text-base break-words relative"
-                    initial={{ scale: 0.98 }}
-                    animate={{ scale: 1 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <motion.div
-                      className="absolute inset-0 rounded pointer-events-none"
-                      style={{ border: "1px solid #1793D1" }} // Arch cyan
-                      animate={{ opacity: [0.3, 0.8, 0.3] }}
-                      transition={{ duration: 2.5, repeat: Infinity }}
-                    />
-                    <span className="text-green-400">{decryptedText}</span>
-                    {!decryptionComplete && cursorVisible && (
-                      <motion.span
-                        animate={{ opacity: [1, 0], scale: [1, 1.2] }}
-                        transition={{ duration: 0.5, repeat: Infinity }}
-                        className="text-green-500"
-                      >
-                        ▋
-                      </motion.span>
-                    )}
-                  </motion.div>
-                </motion.div>
-              ) : null}
-
-              {decryptionComplete && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.2, type: "spring" }}
-                  className="mt-6 p-4 bg-gradient-to-br from-green-900 to-green-800 bg-opacity-20 rounded-lg relative"
-                >
-                  <motion.div
-                    className="absolute inset-0 rounded-lg pointer-events-none"
-                    style={{ border: "1px solid #1793D1" }} // Arch cyan
-                    animate={{ opacity: [0.5, 1, 0.5] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  />
-                  <div className="text-green-500 mb-2 text-sm sm:text-base">
-                    [SEU-SECURITY]$ ./validation.sh --success
-                  </div>
-                  <div className="text-green-400 text-sm sm:text-base">
-                    Decryption successful! Authentication complete.
-                  </div>
-                  <div className="text-green-300 my-2 text-sm sm:text-base">
-                    Thank you for participating in our security demonstration.
-                    Proceed to visitor check-in terminal.
-                  </div>
-                  <motion.button
-                    whileHover={{
-                      scale: 1.05,
-                      boxShadow: "0 0 20px rgba(34,197,94,0.7)",
-                      background: "linear-gradient(45deg, #16a34a, #22c55e)",
-                    }}
-                    whileTap={{ scale: 0.95 }}
-                    animate={{
-                      borderColor: ["#1793D1", "#22c55e", "#1793D1"], // Arch cyan + green
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      repeatType: "reverse",
-                    }}
-                    onClick={resetDemo}
-                    className="mt-3 w-full sm:w-auto bg-gradient-to-r from-green-800 to-green-700 text-green-100 font-bold py-2 px-4 rounded border-2 border-green-600 transition-colors duration-300 text-sm sm:text-base relative overflow-hidden"
-                  >
-                    <motion.div
-                      className="absolute inset-0"
-                      animate={{
-                        background: [
-                          "linear-gradient(45deg, rgba(34,197,94,0.2), transparent)",
-                          "linear-gradient(45deg, transparent, rgba(34,197,94,0.2))",
-                        ],
-                      }}
-                      transition={{ duration: 2, repeat: Infinity }}
-                    />
-                    $ ./reset_demo.sh
-                  </motion.button>
-                </motion.div>
-              )}
-            </motion.div>
-          )}
-
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, type: "spring" }}
-            className="text-gray-500 text-xs border-t border-cyan-400 pt-3 mt-6 relative" // Arch cyan border
+            variants={footerVariants}
+            className="text-[#00ffcc] text-[10px] border-t-2 border-[#00ffcc] pt-2 mt-3 sm:mt-6 relative"
           >
             <motion.div
               className="absolute inset-0 pointer-events-none"
-              style={{ borderTop: "1px solid #1793D1" }} // Arch cyan
+              style={{ borderTop: "1px dashed #00ffcc" }}
               animate={{ opacity: [0.5, 1, 0.5] }}
               transition={{ duration: 2, repeat: Infinity }}
             />
-            <div>SEU-SECURITY-CONSOLE v3.4.2 | Computing Security Department</div>
-            <div>© 2025 SEU University | Type 'help' for available commands</div>
+            <div className="text-center flex items-center justify-center">
+              <AiOutlineBug className="mr-2 text-[#39ff14]" />
+              SEU-TERMINAL v4.0.0 | LIMITED ACCESS
+            </div>
+            <div className="text-center text-[#e0ffeb]">© 2025 SEU | COMMAND: 'override' FOR PROTOCOLS</div>
           </motion.div>
         </div>
       </motion.div>
@@ -572,8 +517,6 @@ const CipherDecryptor = () => {
   );
 };
 
-// PropTypes for future extensibility
 CipherDecryptor.propTypes = {};
 
-// Export
 export default CipherDecryptor;
