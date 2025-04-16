@@ -19,9 +19,9 @@ const CipherDecryptor = () => {
   );
 
   const encryptedMessage =
-    "Zhofrph wr VHX Xqlyhuvlwb! Zh duh gholjkwhg wr kdyh brx zlwk xv wrgdb dv zh vkrzfdvh rxu dgydqfhphqwv lq frpsxwlqj vhfxulwb. Brxu ylvlw lv dq krqru, dqg zh orrn iruzdug wr lqvljkwixo glvfxvvlrqv dqg ixwxuh fROoderudwlrqv";
+    "Zhofrph wr wkh Surjudp ri Frpsxwlqj Vhfxulwb dw Vd[rqb Hjbsw Xqlyhuvlwb! Zh duh wkuloo hg wr kdyh brx hasoruh rxu zruog ri gljlwdo surwhfwlrq dqg fbehuvhfxulwb. Wr gdb, brx'yh hqfrxqwhuhg brxu iluvw hqfubswlrq fkdoohqjh - d Fdhvdu flskhu. Eb ghfrglqj wklv phvvdjh, brx'yh douhdgb wdnhq brxu iluvw vwhs lqwr wkh halflwlqj uhdop ri lqirupdwlrq vhfxulwb. Dw VHX, zh frpelqh Jhupdq hqjlqhhulqj suhflvlrq zlwk Hjbswldq lqqrydwlrq wr fuhdwh wrpruurz'v gljlwdo jxdugldqv. Zh krsh brx hqmrb brxu ylvlw dqg glvfryhu wkh idvflqdwlqj rssruwxqlwlhv zdvwlqj iru brx lq rxu surjudpv. Wkh gljlwdo zruog qhhgv euljkw plqgv olnh brxuv!";
   const decryptedMessage =
-    "Welcome to SEU University! We are delighted to have you with us today as we showcase our advancements in computing security. Your visit is an honor, and we look forward to insightful discussions and future cOLlaborations";
+    "Welcome to the Program of Computing Security at Saxony Egypt University! We are thrilled to have you explore our world of digital protection and cybersecurity. Today, you've encountered your first encryption challenge - a Caesar cipher. By decoding this message, you've already taken your first step into the exciting realm of information security. At SEU, we combine German engineering precision with Egyptian innovation to create tomorrow's digital guardians. We hope you enjoy your visit and discover the fascinating opportunities waiting for you in our programs. The digital world needs bright minds like yours!";
   const terminalCommands = [
     'sudo ./decrypt_caesar.sh --input="encrypted_message.txt" --shift=3',
     "loading cryptography modules...",
